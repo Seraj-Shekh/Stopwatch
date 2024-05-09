@@ -82,14 +82,22 @@
 
     function startStop() {
         if (isRunning) {
-            clearInterval(timer);
-            isRunning = false;
-            document.getElementById("startStop").textContent = "Start";
+            stop();
         } else {
-            timer = setInterval(updateTime, 1); // Update every millisecond
-            isRunning = true;
-            document.getElementById("startStop").textContent = "Stop";
+            start();
         }
+    }
+
+    function start() {
+        timer = setInterval(updateTime, 1); // Update every millisecond
+        isRunning = true;
+        document.getElementById("startStop").textContent = "Stop";
+    }
+
+    function stop() {
+        clearInterval(timer);
+        isRunning = false;
+        document.getElementById("startStop").textContent = "Start";
     }
 
     function updateTime() {
