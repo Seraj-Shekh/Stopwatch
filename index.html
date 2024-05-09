@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Beautiful Stopwatch</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+        background-color: #f0f0f0;
+    }
+    .stopwatch {
+        text-align: center;
+    }
+    .clock {
+        position: relative;
+        width: 320px; /* Adjusted size */
+        height: 320px; /* Adjusted size */
+        border-radius: 50%;
+        border: 10px solid #4CAF50;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 3rem;
+        box-sizing: border-box;
+    }
+    .time {
+        z-index: 1;
+    }
+    .clock::before {
+        content: '';
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        border: 10px solid rgba(0, 0, 0, 0.1);
+        box-sizing: border-box;
+        z-index: 0;
+    }
+    .buttons {
+        margin-top: 20px;
+    }
+    button {
+        font-size: 1.5rem;
+        padding: 10px 20px;
+        margin: 0 10px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        background-color: #4CAF50;
+        color: white;
+    }
+    button:hover {
+        background-color: #45a049;
+    }
+</style>
+</head>
+<body>
+
+<div class="stopwatch">
+    <div class="clock">
+        <div class="time">00:00:00:000</div>
+    </div>
+    <div class="buttons">
+        <button id="startStop">Start</button>
+        <button id="reset">Reset</button>
+    </div>
+</div>
+
+<script>
+    let timer;
+    let milliseconds = 0;
+    let seconds = 0;
+    let minutes = 0;
+    let hours = 0;
+    let isRunning = false;
+
+    function startStop() {
+        if (isRunning) {
+            clearInterval(timer);
+            isRunning = false;
+            document.getElementById("startStop").textContent = "Start";
+        } else {
+            timer = setInterval(updateTime, 1); // Update every millisecond
+            isRunning = true;
+            document.getElementById("startStop").textContent = "Stop";
+        }
+    }
+
+    function updateTime() {
+        milliseconds++;
+        if (milliseconds >= 1000) {
+            milliseconds = 0;
+            seconds++;
+            if (seconds >= 60) {
+                seconds = 0;
+                minutes++;
+                if (minutes >= 60) {
+                    minutes = 0;
+                    hours++;
+                }
+            }
+        }
+        let timeString = pad(hours) + ":" + pad(minutes) + ":" + pad(seconds) + ":" + pad(milliseconds);
+        document.querySelector(".time").textContent = timeString;
+    }
+
+    function reset() {
+        clearInterval(timer);
+        milliseconds = 0;
+        seconds = 0;
+        minutes = 0;
+        hours = 0;
+        isRunning = false;
+        document.querySelector(".time").textContent = "00:00:00.000";
+        document.getElementById("startStop").textContent = "Start";
+    }
+
+    function pad(value) {
+        return value < 10 ? "0" + value : value;
+    }
+
+    document.getElementById("startStop").addEventListener("click", startStop);
+    document.getElementById("reset").addEventListener("click", reset);
+</script>
+
+</body>
+</html>
